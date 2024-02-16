@@ -1,0 +1,34 @@
+from PIL import Image
+
+def fill(x1,y1,z1,x2,y2,z2,material):
+  return "fill ~{} ~{} ~{} ~{} ~{} ~{} {}".format(x1, y1, z1, x2, y2, z2, material) + "/n"
+
+planek=Image.open("maze.png")
+sloupce,radky=planek.size
+print(sloupce,radky)
+
+body=planek.load()
+
+vystup=""
+vystup += fill(0,-1,0,sloupce,-2,radky,"water")
+vystup += fill(0,-3,0,sloupce,-3,radky,"gold_block")
+
+
+for radek in range(radky):
+  linka=""
+  for sloupec in range(sloupce):
+    bod=body[sloupec,radek]
+    if not(bod[1]==255 and bod[2]==255):
+      #print(bod)
+      if bod[0]==bod[1] and bod[2]==bod[1] and bod[2]==bod[0]:
+        linka += "#"
+        vystup += fill(sloupec,1,radek,sloupec,3,radek,"gold_block")
+
+      if bod[0]==255 and bod[1]==bod[2]:
+        linka += "="
+        vystup += fill(sloupec,-3,radek,sloupec,-3,radek,"glowstone")
+
+    else:
+      linka += "."
+
+  print(vystup)
